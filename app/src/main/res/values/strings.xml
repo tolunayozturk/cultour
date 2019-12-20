@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Cultour</string>
+    <string name="FindLocation_title">Where do you want to explore?</string>
+    <string name="FindLocation_place_hint">Search a place manually</string>
+    <string name="FindLocation_or_text">or find automatically</string>
+    <string name="action_find_my_location">Find my location</string>
+
+</resources>
