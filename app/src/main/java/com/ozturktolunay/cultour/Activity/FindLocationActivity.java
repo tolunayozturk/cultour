@@ -82,7 +82,7 @@ public class FindLocationActivity extends AppCompatActivity {
     }
 
     //region OnClick listeners
-    View.OnClickListener edit_place_search_listener = new View.OnClickListener() {
+    private View.OnClickListener edit_place_search_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "edit_place_search clicked!");
@@ -100,7 +100,7 @@ public class FindLocationActivity extends AppCompatActivity {
         }
     };
 
-    View.OnClickListener button_find_my_location_listener = new View.OnClickListener() {
+    private View.OnClickListener button_find_my_location_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "button_find_my_location clicked!");
@@ -136,8 +136,32 @@ public class FindLocationActivity extends AppCompatActivity {
 
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(Objects.requireNonNull(data));
-                Log.i(TAG, "Place: " + place.getName());
+                Place place = null;
+
+                if (data != null) {
+                    place = Autocomplete.getPlaceFromIntent(data);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Something went wrong.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Intent intent = new Intent(FindLocationActivity.this,
+                        BottomNavigationActivity.class);
+
+                if (place.getLatLng() != null) {
+                    intent.putExtra("latitude", place.getLatLng().latitude);
+                    intent.putExtra("longitude", place.getLatLng().longitude);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Something went wrong.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                startActivity(intent);
+
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
             } else if (resultCode == RESULT_CANCELED) {

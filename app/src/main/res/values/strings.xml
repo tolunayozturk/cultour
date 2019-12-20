@@ -5,4 +5,7 @@
     <string name="FindLocation_or_text">or find automatically</string>
     <string name="action_find_my_location">Find my location</string>
 
+    <string name="nav_poi_title">Places of Interest</string>
+    <string name="nav_restaurant_title">Restaurants</string>
+    <string name="nav_lodging_title">Lodging</string>
 </resources>

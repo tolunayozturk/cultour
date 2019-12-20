@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_poi"
+        android:icon="@drawable/ic_sights_black_24dp"
+        android:title="@string/nav_poi_title" />
+
+    <item
+        android:id="@+id/nav_restaurant"
+        android:icon="@drawable/ic_restaurant_black_24dp"
+        android:title="@string/nav_restaurant_title" />
+
+    <item
+        android:id="@+id/nav_lodging"
+        android:icon="@drawable/ic_hotel_black_24dp"
+        android:title="@string/nav_lodging_title" />
+
+</menu>
