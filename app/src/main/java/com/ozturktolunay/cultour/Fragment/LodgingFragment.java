@@ -126,7 +126,18 @@ public class LodgingFragment extends Fragment {
                                     rating = res.getDouble("rating");
                                 } else { continue; }
 
-                                placeArrayList.add(new GPlace(photoReference, address, name, id, rating));
+                                Double latitude;
+                                Double longitude;
+                                latitude = res.getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lat");
+                                longitude = res.getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lng");
+
+                                Log.i(TAG, latitude.toString());
+                                Log.i(TAG, longitude.toString());
+
+                                placeArrayList.add(new GPlace(photoReference, address, name, id,
+                                        rating, latitude, longitude));
                                 Log.i(TAG, String.format("Name: %s", name));
                             }
 

@@ -82,12 +82,17 @@ public class GPlaceAdapter extends RecyclerView.Adapter<GPlaceAdapter.GPlaceView
 
         final Double rating = current.getRating();
 
+        final Double latitude = current.getLatitude();
+        final Double longitude = current.getLongitude();
+
         final Intent intent = new Intent(context.getApplicationContext(), PlaceDetailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         holder.card_gplace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 intent.putExtra("placeId", id);
+                intent.putExtra("latitude", latitude);
+                intent.putExtra("longitude", longitude);
                 context.startActivity(intent);
             }
         });

@@ -126,7 +126,15 @@ public class RestaurantFragment extends Fragment {
                                     rating = res.getDouble("rating");
                                 } else { continue; }
 
-                                placeArrayList.add(new GPlace(photoReference, address, name, id, rating));
+                                Double latitude;
+                                Double longitude;
+                                latitude = res.getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lat");
+                                longitude = res.getJSONObject("geometry").getJSONObject("location")
+                                        .getDouble("lng");
+
+                                placeArrayList.add(new GPlace(photoReference, address, name, id,
+                                        rating, latitude, longitude));
                                 Log.i(TAG, String.format("Name: %s", name));
                             }
 
