@@ -27,7 +27,7 @@
         android:layout_weight="10" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="256sp"
+        android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:layout_weight="15"
         app:endIconMode="custom"

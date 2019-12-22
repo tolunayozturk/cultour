@@ -4,8 +4,13 @@
     <string name="FindLocation_place_hint">Search a place manually</string>
     <string name="FindLocation_or_text">or find automatically</string>
     <string name="action_find_my_location">Find my location</string>
+    <string name="Lodging_places_to_stay_on">Places to stay</string>
 
     <string name="nav_poi_title">Places of Interest</string>
     <string name="nav_restaurant_title">Restaurants</string>
     <string name="nav_lodging_title">Lodging</string>
+    <string name="Restaurant_restaurants">Restaurants</string>
+    <string name="Poi_museums">Museums</string>
+    <string name="Poi_aquariums">Aquariums</string>
+    <string name="Poi_art_galleries">Art Galleries</string>
 </resources>

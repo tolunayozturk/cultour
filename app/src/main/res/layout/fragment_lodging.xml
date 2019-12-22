@@ -13,12 +13,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Fragment Lodging" />
+                android:id="@+id/text_restaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="12dp"
+                android:text="@string/Lodging_places_to_stay_on"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_lodging"
+                android:id="@+id/recycler_LodgingFragment_lodging"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

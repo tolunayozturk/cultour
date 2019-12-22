@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,6 +15,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.libraries.places.api.Places;
@@ -68,6 +71,14 @@ public class FindLocationActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, placesApiKey);
         }
+
+        //region Set status bar color
+        Window window = FindLocationActivity.this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(
+                FindLocationActivity.this, R.color.quantum_white_100));
+        //endregion
 
         //region Resource assignment
         edit_place_search = findViewById(R.id.edit_FindLocation_place_search);

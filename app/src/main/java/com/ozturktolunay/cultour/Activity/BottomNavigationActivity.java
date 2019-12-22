@@ -2,10 +2,13 @@ package com.ozturktolunay.cultour.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ozturktolunay.cultour.Fragment.LodgingFragment;
@@ -26,6 +29,14 @@ public class BottomNavigationActivity extends AppCompatActivity {
 
         //region Resource assignment
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //endregion
+
+        //region Set status bar color
+        Window window = BottomNavigationActivity.this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(
+                BottomNavigationActivity.this, R.color.quantum_white_100));
         //endregion
 
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
@@ -58,5 +69,13 @@ public class BottomNavigationActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+    public Double getLatitude() {
+        return getIntent().getExtras().getDouble("latitude");
+    }
+
+    public Double getLongitude() {
+        return getIntent().getExtras().getDouble("longitude");
+    }
 
 }
