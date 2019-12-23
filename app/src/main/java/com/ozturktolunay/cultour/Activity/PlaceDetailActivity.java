@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
     MapView map_place;
 
     TextView text_place_name;
+    TextView text_place_rating;
     //endregion
 
     private Double latitude;
@@ -50,7 +52,10 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
     private List<Place.Field> placeFields;
 
     private String placesApiKey;
+    private String placeId;
+
     private Context applicationContext;
+    private PlacesClient placesClient;
 
     final String TAG = "PlaceDetailActivity";
 
@@ -60,7 +65,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
         setContentView(R.layout.activity_place_detail);
 
         //region Get intent extras
-        String placeId = getIntent().getExtras().getString("placeId");
+        placeId = getIntent().getExtras().getString("placeId");
 
         latitude = getIntent().getExtras().getDouble("latitude");
         longitude = getIntent().getExtras().getDouble("longitude");
@@ -85,15 +90,13 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
             Places.initialize(applicationContext, placesApiKey);
         }
 
-        PlacesClient placesClient = Places.createClient(this);
+        placesClient = Places.createClient(this);
 
         //region Resource assignment
         map_place = findViewById(R.id.map_PlaceDetail_place);
         text_place_name = findViewById(R.id.text_place_name);
+        text_place_rating = findViewById(R.id.text_place_rating);
         //endregion
-
-        map_place.getMapAsync(this);
-        map_place.onCreate(savedInstanceState);
 
         placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
                 Place.Field.LAT_LNG, Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS,
@@ -101,24 +104,33 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
                 Place.Field.RATING, Place.Field.WEBSITE_URI, Place.Field.UTC_OFFSET,
                 Place.Field.PHOTO_METADATAS);
 
-
         FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.newInstance(placeId, placeFields);
         placesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
             @Override
             public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                 place = fetchPlaceResponse.getPlace();
                 text_place_name.setText(place.getName());
+                text_place_rating.setText(String.format("⭐️ %s", place.getRating()));
             }
         });
+
+        map_place.getMapAsync(this);
+        map_place.onCreate(savedInstanceState);
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng = new LatLng(latitude, longitude);
+    public void onMapReady(final GoogleMap googleMap) {
+        final LatLng latLng = new LatLng(latitude, longitude);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 latLng, 15F));
 
-        googleMap.addMarker(new MarkerOptions().position(latLng).title(""));
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                googleMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
+            }
+        }, 1000);
     }
 
     @Override

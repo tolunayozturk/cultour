@@ -2,6 +2,9 @@ package com.ozturktolunay.cultour.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.ozturktolunay.cultour.Activity.FindLocationActivity;
 import com.ozturktolunay.cultour.Activity.PlaceDetailActivity;
 import com.ozturktolunay.cultour.GPlace;
@@ -23,7 +28,7 @@ import java.util.ArrayList;
 public class GPlaceAdapter extends RecyclerView.Adapter<GPlaceAdapter.GPlaceViewHolder> {
 
     private Context context;
-
+    private Context applicationContext;
     private ArrayList<GPlace> gPlacesList;
 
     private String placesApiKey;
@@ -90,6 +95,8 @@ public class GPlaceAdapter extends RecyclerView.Adapter<GPlaceAdapter.GPlaceView
         holder.card_gplace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 intent.putExtra("placeId", id);
                 intent.putExtra("latitude", latitude);
                 intent.putExtra("longitude", longitude);
