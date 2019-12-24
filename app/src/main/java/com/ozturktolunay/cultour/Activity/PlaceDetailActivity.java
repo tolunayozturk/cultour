@@ -4,12 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.ApiException;
@@ -29,8 +35,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.ozturktolunay.cultour.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -42,13 +50,14 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
 
     TextView text_place_name;
     TextView text_place_rating;
+
+    ListView list_detail;
     //endregion
 
     private Double latitude;
     private Double longitude;
 
     private Place place;
-    private GoogleMap googleMap;
     private List<Place.Field> placeFields;
 
     private String placesApiKey;
@@ -96,6 +105,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
         map_place = findViewById(R.id.map_PlaceDetail_place);
         text_place_name = findViewById(R.id.text_place_name);
         text_place_rating = findViewById(R.id.text_place_rating);
+        list_detail = findViewById(R.id.list_detail);
         //endregion
 
         placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME,
@@ -111,6 +121,51 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
                 place = fetchPlaceResponse.getPlace();
                 text_place_name.setText(place.getName());
                 text_place_rating.setText(String.format("⭐️ %s", place.getRating()));
+
+                List<String> details = new ArrayList<>();
+                details.add(place.getAddress());
+                details.add("📞    " + place.getPhoneNumber());
+                try {
+                    details.add(String.format("%s    %s", "⌛️", place.getOpeningHours().getWeekdayText().get(0).substring(8)));
+                    switch (place.getPriceLevel()) {
+                        case 0:
+                            details.add("💲    " + "Free");
+                            break;
+                        case 1:
+                            details.add("💲    " + "Steep");
+                            break;
+                        case 2:
+                            details.add("💲    " + "Pricey");
+                            break;
+                        case 3:
+                            details.add("💲    " + "Expensive");
+                            break;
+                        case 4:
+                            details.add("💲    " + "High-priced");
+                            break;
+                    }
+
+                    details.add("{  }    " + place.getWebsiteUri());
+                } catch (NullPointerException e) { }
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(applicationContext,
+                        android.R.layout.simple_list_item_1, details);
+
+                list_detail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (position == 4) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(place.getWebsiteUri());
+                            startActivity(intent);
+                        } else if (position == 1) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", place.getPhoneNumber(), null));
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+                list_detail.setAdapter(arrayAdapter);
             }
         });
 
@@ -130,7 +185,7 @@ public class PlaceDetailActivity extends AppCompatActivity implements OnMapReady
             public void run() {
                 googleMap.addMarker(new MarkerOptions().position(latLng).title(place.getName()));
             }
-        }, 1000);
+        }, 2500);
     }
 
     @Override
